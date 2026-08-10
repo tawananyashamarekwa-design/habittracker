@@ -86,13 +86,21 @@ input[type="date"].input::-webkit-calendar-picker-indicator{filter:invert(0.4);}
 .dialog-actions{display:flex;justify-content:flex-end;gap:var(--space-2);margin-top:var(--space-2);}
 
 .sb-root{min-height:100vh;min-height:100dvh;}
-.app-shell{width:100%;}
+.app-shell{display:flex;min-height:100vh;min-height:100dvh;width:100%;}
+.app-sidebar{display:flex;flex-direction:column;width:216px;flex:none;
+  border-right:1px solid var(--color-divider);padding:26px 16px;gap:3px;}
+.app-main{flex:1;padding:48px 56px 80px;max-width:1080px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border:none;
+  border-left:2px solid transparent;background:transparent;color:var(--color-text);
+  font-weight:400;font-family:var(--font-body);font-size:14px;cursor:pointer;
+  border-radius:var(--radius-md);text-align:left;width:100%;}
+.nav-item.is-active{border-left:2px solid var(--color-accent);color:var(--color-accent-800);font-weight:600;}
 
 @media (max-width:760px){
   .app-shell{flex-direction:column;min-height:100vh;min-height:100dvh;}
   /* Sidebar becomes a fixed bottom tab bar so the app owns the whole screen. */
   .app-sidebar{position:fixed;bottom:0;left:0;right:0;z-index:40;
-    flex-direction:row;width:100%;height:auto;
+    flex-direction:row;width:100%;height:auto;flex:none;
     justify-content:space-around;align-items:stretch;
     border-right:none;border-top:1px solid var(--color-divider);
     background:var(--color-bg);padding:6px 4px;gap:0;
@@ -499,16 +507,15 @@ export default function StudentTracker({ session }) {
   // ============================ RENDER ======================================
   return (
     <div className="sb-root">
-      <div className="app-shell" style={{ display: "flex", minHeight: "100vh" }}>
+      <div className="app-shell">
 
         {/* sidebar */}
-        <nav className="app-sidebar" style={{ display: "flex", flexDirection: "column", width: 216, flex: "none", borderRight: "1px solid var(--color-divider)", padding: "26px 16px", gap: 3 }}>
+        <nav className="app-sidebar">
           <div className="nav-brand" style={{ marginBottom: 22 }}>StudyBoard</div>
           {navItems.map((n) => {
             const active = s.activeTab === n.key;
             return (
-              <button key={n.key} className={`nav-item ${active ? "is-active" : ""}`} onClick={() => set({ activeTab: n.key })}
-                style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 11px", border: "none", borderLeft: active ? "2px solid var(--color-accent)" : "2px solid transparent", background: "transparent", color: active ? "var(--color-accent-800)" : "var(--color-text)", fontWeight: active ? 600 : 400, fontFamily: "var(--font-body)", fontSize: 14, cursor: "pointer", borderRadius: "var(--radius-md)", textAlign: "left", width: "100%" }}>
+              <button key={n.key} className={`nav-item ${active ? "is-active" : ""}`} onClick={() => set({ activeTab: n.key })}>
                 {n.icon}<span>{n.label}</span>
               </button>
             );
@@ -516,7 +523,7 @@ export default function StudentTracker({ session }) {
         </nav>
 
         {/* main */}
-        <main key={s.activeTab} className="app-main" style={{ flex: 1, padding: "48px 56px 80px", maxWidth: 1080 }}>
+        <main key={s.activeTab} className="app-main">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 26, flexWrap: "wrap", gap: 8 }}>
             <h1 style={{ margin: 0 }}>{pageTitles[s.activeTab]}</h1>
             <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
